@@ -1,0 +1,47 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#pragma warning(disable:4996)
+#define TRUE 1
+#define FALSE 0
+
+typedef int element;
+typedef struct ArrayListNodeType {
+	element data;
+}ArrayListNode;
+typedef struct ArryaListType {
+	int max_num;
+	int current_num;
+	ArrayListNode *array;
+}ArrayList;
+ArrayList *createList(int n) {
+	ArrayList *new_list;
+	new_list = (ArrayList*)malloc(sizeof(ArrayList));
+	new_list->max_num = n;
+	new_list->current_num = 0;
+	new_list->array = NULL;
+	return new_list;
+}
+int isFull(ArrayList *list) {
+	return list->max_num == list->current_num;
+}
+void AddElement(ArrayList *list, ArrayListNode new_data, int position) {
+	if (!isFull(list)) {
+		for (int i = list->current_num; i >= position; i--) {
+			list->array[i + 1] = list->array[i];
+		}
+		list->array[position]=new_data;
+	}
+	list->current_num++;
+}
+void removeElement(ArrayList *list, int position) {
+	int i;
+	for (i = position; i < list->current_num-1; i++) {//배열리스트의 current_num은 empty, 즉 다음에 삽입될 위치를 가르키고 있음
+		list->array[i] = list->array[i + 1];
+	}
+	list->current_num--;
+}
+ArrayListNode* getElement(ArrayList* list, int position) {
+	ArrayListNode *p = &list->array[position];
+	return p;
+}
