@@ -1,0 +1,120 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#pragma warning(disable:4996)
+typedef int element;
+typedef struct ListNodeType {
+	element data;
+	struct ListNodeType *link;
+}ListNode;
+typedef struct LinkedListType {
+	int currentelementcount;
+	ListNode headerNode;//더미(Dummy Node)사용
+}LinkedList;
+LinkedList *createLinkedList() {
+	LinkedList *new_header = NULL;
+	new_header = (LinkedList *)malloc(sizeof(LinkedList));
+	memset(new_header, 0, sizeof(LinkedList));//memset=>구조체 초기화(속성값을 모두 0으로 초기화)
+	return new_header;
+}
+void addElement(LinkedList *list, int position, element new_data) {
+	ListNode *preNode = NULL;
+	ListNode *pNewNode = NULL;
+	int i;
+	if (list != NULL) {
+		if (position >= 0 && position <= list->currentelementcount) {
+			pNewNode = (ListNode *)malloc(sizeof(ListNode));
+			pNewNode->data = new_data;
+			pNewNode->link = NULL;
+			preNode = &(list->headerNode);
+			for (i = 0; i < position; i++) {
+				preNode = preNode->link;
+			}
+			pNewNode->link = preNode->link;
+			preNode->link = pNewNode;
+		}
+		list->currentelementcount++;
+	}
+}
+ListNode* insert_first(ListNode *head, int value) {
+	ListNode *p = (ListNode *)malloc(sizeof(ListNode));
+	p->data = value;
+	p->link = head;
+	head = p;
+	return head;
+}
+ListNode *insert(ListNode *head, ListNode *pre, element value) {
+	ListNode *p = (ListNode *)malloc(sizeof(ListNode));
+	p->data = value;
+	p->link = pre->link;
+	pre->link = p;
+	return head;
+}
+void removeElement(LinkedList *list, int position) {
+	ListNode *preNode = NULL;
+	ListNode *removeNode = NULL;
+	int i;
+	preNode = &(list->headerNode);
+	for (i = 0; i < position; i++) {
+		preNode = preNode->link;
+	}
+	removeNode = preNode->link;
+	preNode->link = removeNode->link;
+	free(removeNode);
+	list->currentelementcount--;
+}
+ListNode *delete_first(ListNode *head) {
+	ListNode *removed;
+	removed = head;
+	head = head->link;
+	free(removed);
+	return head;
+}
+ListNode *delete(ListNode *head, ListNode *pre) {
+	ListNode *remove;
+	remove = pre->link;
+	pre->link = remove->link;
+	free(remove);
+	return head;
+}
+ListNode *getElement(LinkedList *list, int position) {
+	ListNode *p = &(list->headerNode);
+	for (int i = 0; i <= position; i++) {
+		p = p->link;
+	}
+	return p;
+}
+void displayLinkedList(LinkedList *list) {
+	ListNode *p = &(list->headerNode);
+	for (int i = 0; i < list->currentelementcount; i++) {
+		p = p->link;
+		printf("%d->", p->data);
+	}
+}
+void print_list(ListNode *head) {
+	ListNode *p;
+	for (p = head; p != NULL; p = p->link) {
+		printf("%d->", p->data);
+	}
+	printf("NULL\n");
+}
+int main(void) {
+	LinkedList *plist = NULL;
+	plist = createLinkedList();
+	addElement(plist, 0, 1);
+	addElement(plist, 1, 3);
+	addElement(plist, 2, 5);
+	displayLinkedList(plist);
+}
+/*
+int main(void) {
+	ListNode *head = NULL;
+	for (int i = 0; i < 5; i++) {
+		head = insert_first(head, i);
+		print_list(head);
+	}
+	for (int i = 0; i < 5; i++) {
+		head = delete_first(head);
+		print_list(head);
+	}
+}*/
