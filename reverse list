@@ -24,7 +24,7 @@ ListNode *reverse(ListNode *head) {
 	ListNode *p, *q, *r;
 	p = head;
 	q = NULL;
-	while (p!= NULL) { // 맨 마지막 노드까지 감 while(p->link!=NULL) 이면 맨마지막 노드의 앞에서 끊김
+	while (p!= NULL) { // 맨 마지막 노드-->마지막  링크필드까지 감 while(p->link!=NULL) 이면 맨마지막 노드의 앞에서 끊김
 		r = q;
 		q = p;
 		p = p->link;
