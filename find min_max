@@ -1,0 +1,68 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#pragma warning(disable:4996)
+typedef int element;
+typedef struct ListNodeType {
+	element data;
+	struct ListNodeType *link;
+}ListNode;
+ListNode* insert_last(ListNode *head, element value) {
+	ListNode *new_node = (ListNode *)malloc(sizeof(ListNode));
+	ListNode *p;
+	new_node->data = value;
+	new_node->link = NULL;
+	if (head == NULL) {
+		head = new_node;
+	}
+	else {
+		p = head;
+		while (p->link != NULL) {
+			p = p->link;
+		}
+		p->link = new_node;
+	}
+	return head;
+}
+void print_list(ListNode *head) {
+	ListNode *p;
+	for (p = head; p->link != NULL; p = p->link) {
+		printf("%d->", p->data);
+	}
+	printf("%d\n", p->data);
+}
+element find_max(ListNode *head) {
+	ListNode *p = head;
+	element max = p->data;
+	for (p = head->link; p != NULL; p = p->link) {
+		if (p->data > max) {
+			max = p->data;
+		}
+	}
+	return max;
+}
+element find_min(ListNode *head) {
+	ListNode *p = head;
+	element min = p->data;
+	for (p = head->link; p != NULL; p = p->link) {
+		if (p->data < min) {
+			min = p->data;
+		}
+	}
+	return min;
+}
+int main(void) {
+	int n,num;
+	char name[100];
+	int age;
+	float height;
+	element *value;
+	ListNode *head=NULL;
+	scanf("%d", &n);
+	for (int i = 0; i < n; i++) {
+		scanf("%d", &num);
+		head = insert_last(head, num);
+	}
+	printf("%d\n", find_max(head));
+	printf("%d", find_min(head));
+}
