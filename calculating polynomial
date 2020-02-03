@@ -1,0 +1,98 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#pragma warning(disable:4996)
+typedef int element;
+typedef struct ListNode {
+	int coef;
+	int expon;
+	struct ListNode *link;
+}ListNode;
+typedef struct ListType {
+	int size;
+	ListNode *head;
+	ListNode *tail;
+}ListType;
+void error(char *message) {
+	fprintf(stderr, "%s\n", message);
+	exit(1);
+}
+ListType *create() {
+	ListType *new_list = (ListType *)malloc(sizeof(ListType));
+	new_list->size = 0;
+	new_list->head = NULL;
+	new_list->tail = NULL;
+	return new_list;
+}
+void insert_last(ListType *list, int coef, int expon) {
+	ListNode *new_node = (ListNode *)malloc(sizeof(ListNode));
+	new_node->coef = coef;
+	new_node->expon = expon;
+	new_node->link = NULL;
+	if (list->tail == NULL) {//노드가 아무것도 없을때
+		list->head = list->tail = new_node;
+	}
+	else {
+		list->tail->link = new_node;
+		list->tail = new_node;
+	}
+	list->size++;
+}
+void poly_add(ListType *list1, ListType *list2, ListType *list3) {
+	ListNode *p1, *p2;
+	int sum = 0;
+	p1 = list1->head;
+	p2 = list2->head;
+	while (p1&&p2) {//두 포인터가 널일 때까지
+		if (p1->expon > p2->expon) {
+			insert_last(list3, p1->coef, p1->expon);
+			p1 = p1->link;
+		}
+		else if (p1->expon < p2->expon) {
+			insert_last(list3, p2->coef, p2->expon);
+			p2 = p2->link;
+		}
+		else {
+			sum = p1->coef + p2->coef;
+			insert_last(list3, sum, p1->expon);
+			p1 = p1->link;
+			p2 = p2->link;
+		}
+		for (; p1!=NULL; p1 = p1->link) {
+			insert_last(list3, p1->coef, p1->expon);
+		}
+		for (; p2!=NULL; p2 = p2->link) {
+			insert_last(list3, p2->coef, p2->expon);
+		}
+	}
+}
+void poly_print(ListType *list) {
+	ListNode *p = list->head;
+	printf("polynomial = ");
+	for (; p != NULL; p = p->link) {
+		printf("%d^%d + ", p->coef, p->expon);
+	}
+	printf("\n");
+}
+int main(void) {
+	ListType *list1, *list2, *list3;
+	list1 = create();
+	list2 = create();
+	list3 = create();
+
+	insert_last(list1, 3, 12);
+	insert_last(list1, 2, 8);
+	insert_last(list1, 1, 0);
+
+
+	insert_last(list2, 8, 12);
+	insert_last(list2, -3, 10);
+	insert_last(list2, 10, 6);
+
+	poly_print(list1);
+	poly_print(list2);
+
+	poly_add(list1, list2, list3);
+	poly_print(list3);
+
+}
