@@ -1,0 +1,47 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#pragma warning(disable:4996)
+typedef int element;
+typedef struct ListNode {
+	element data;
+	struct ListNode *link;
+}ListNode;
+ListNode *insert_first(ListNode *head, element value) {
+	ListNode *p = (ListNode *)malloc(sizeof(ListNode));
+	p->data = value;
+	p->link = head;
+	head = p;
+	return head;
+}
+void print_list(ListNode *head) {
+	for (ListNode *p = head; p != NULL; p = p->link) {
+		printf("%d->", p->data);
+	}
+	printf("NULL\n");
+}
+ListNode *reverse(ListNode *head) {
+	ListNode *p, *q, *r;
+	p = head;
+	q = NULL;
+	while (p!= NULL) { // 맨 마지막 노드까지 감 while(p->link!=NULL) 이면 맨마지막 노드의 앞에서 끊김
+		r = q;
+		q = p;
+		p = p->link;
+		q->link = r; // 역순으로 만들 노드의 링크를 앞에 노드랑 이어주는 역할
+	}
+	return q;//바뀐 리스트의 첫번째 노드(원래는 마지막 노드)
+}
+int main(void) {
+	ListNode *head1 = NULL;
+	ListNode *head2 = NULL;
+
+	head1 = insert_first(head1, 10);
+	head1 = insert_first(head1, 20);
+	head1 = insert_first(head1, 30);
+	print_list(head1);
+
+	head2 = reverse(head1);
+	print_list(head2); 
+
+}
