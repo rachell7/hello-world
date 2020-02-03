@@ -1,0 +1,65 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#pragma warning(disable:4996)
+typedef struct {
+	char name[100];
+	int age;
+	float height;
+}element;
+typedef struct ListNodeType {
+	element data;
+	struct ListNodeType *link;
+}ListNode;
+element *create(char name[], int age, float height) {
+	element *new_element = (element *)malloc(sizeof(element));
+	strcpy(new_element->name,name);
+	new_element->age = age;
+	new_element->height = height;
+	return new_element;
+}
+ListNode* insert_last(ListNode *head, element value) {
+	ListNode *new_node = (ListNode *)malloc(sizeof(ListNode));
+	ListNode *p;
+	new_node->data = value;
+	new_node->link = NULL;
+	if (head == NULL) {
+		head = new_node;
+	}
+	else {
+		p = head;
+		while (p->link != NULL) {
+			p = p->link;
+		}
+		p->link = new_node;
+	}
+	return head;
+}
+int count_node(ListNode *head) {
+	int count = 0;
+	for (ListNode *p = head; p != NULL; p = p->link) {
+		count++;
+	}
+	return count;
+}
+void print_list(ListNode *head) {
+	for (ListNode *p = head; p != NULL; p = p->link) {
+		printf("%s %d %.1f\n", p->data.name, p->data.age, p->data.height);
+	}
+}
+
+int main(void) {
+	int n;
+	char name[100];
+	int age;
+	float height;
+	element *value;
+	ListNode *head=NULL;
+	scanf("%d", &n);
+	for (int i = 0; i < n; i++) {
+		scanf("%s %d %f", name, &age, &height);//lf 아님
+		value = create(name, age, height);
+		head = insert_last(head, *value);
+	}
+	print_list(head);
+}
