@@ -28,7 +28,7 @@ ListNode *concat_list(ListNode *head1, ListNode *head2) {
 	else {
 		ListNode *p;
 		p = head1;
-		while (p->link != NULL) {//head는 앞에 노드를 가르키고있는거임
+		while (p->link != NULL) {//head는 앞에 노드를 가르키고있는거임 + 마지막 노드를 가르키고 마지막노드의 링크 필드까지는 
 			p = p->link;
 		}
 		p->link = head2;
