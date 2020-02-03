@@ -1,0 +1,75 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#pragma warning(disable:4996)
+typedef int element;
+typedef struct ListNodeType {
+	element data;
+	struct ListNodeType *link;
+}ListNode;
+ListNode* create() {
+	ListNode *head = (ListNode *)malloc(sizeof(ListNode));
+	head->link = NULL;
+	return head;
+}
+ListNode* insert_last(ListNode *head, element value) {
+	ListNode *new_node = (ListNode *)malloc(sizeof(ListNode));
+	ListNode *p;
+	new_node->data = value;
+	new_node->link = NULL;
+	if (head == NULL) {
+		head = new_node;
+	}
+	else {
+		p = head;
+		while (p->link != NULL) {
+			p = p->link;
+		}
+		p->link = new_node;
+	}
+	return head;
+}
+int count_node(ListNode *head) {
+	int count = 0;
+	for (ListNode *p = head; p != NULL; p = p->link) {
+		count++;
+	}
+	return count;
+}
+void print_list(ListNode *head) {
+	ListNode *p = head;
+	for (p = head; p->link != NULL; p = p->link) {
+		printf("%d->", p->data);
+	}
+	printf("%d\n", p->data);
+}
+int mentioned(ListNode *head, int search_num) {
+	int count = 0;
+	for (ListNode *p = head; p != NULL; p = p->link) {
+		if (p->data == search_num) {
+			count++;
+		}
+	}
+	return count;
+}
+element cal_sum(ListNode *head) {
+	int sum = 0;
+	for (ListNode *p = head; p != NULL; p = p->link) {
+		sum += p->data;
+	}
+	return sum;
+}
+int main(void) {
+	int n;
+	int number;
+	int new_value;
+	ListNode *head=NULL;
+	scanf("%d", &n);
+	for (int i = 0; i < n; i++) {
+		scanf("%d", &new_value);
+		head=insert_last(head, new_value);
+	}
+	scanf("%d", &number);
+	printf("%d", mentioned(head,number));
+
+}
