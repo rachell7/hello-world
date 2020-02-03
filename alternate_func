@@ -1,0 +1,86 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#pragma warning(disable:4996)
+typedef int element;
+typedef struct ListNodeType {
+	element data;
+	struct ListNodeType *link;
+}ListNode;
+ListNode* insert_last(ListNode *head, element value) {
+	ListNode *new_node = (ListNode *)malloc(sizeof(ListNode));
+	ListNode *p;
+	new_node->data = value;
+	new_node->link = NULL;
+	if (head == NULL) {
+		head = new_node;
+	}
+	else {
+		p = head;
+		while (p->link != NULL) {
+			p = p->link;
+		}
+		p->link = new_node;
+	}
+	return head;
+}
+void print_list(ListNode *head) {
+	ListNode *p;
+	for (p = head; p->link != NULL; p = p->link) {
+		printf("%d->", p->data);
+	}
+	printf("%d\n", p->data);
+}
+
+ListNode * delete_node(ListNode *head) {
+	ListNode *p;
+	ListNode *temp;
+	int i = 0;
+	for (p = head; p->link!= NULL; p = p->link) {
+		if ((i + 1) % 2 == 0)
+			continue;
+		else {
+			temp = p->link;
+			p->link = p->link->link;
+			free(temp);
+			i += 2;
+		}
+	}
+	return head;
+}
+ListNode* alternate(ListNode *list1, ListNode *list2, ListNode *list3) {
+	ListNode *p1;
+	ListNode *p2;
+	p1 = list1;
+	p2 = list2;
+	while (p1&&p2) {
+		list3=insert_last(list3, p1->data);
+		list3=insert_last(list3, p2->data);
+		p1 = p1->link;
+		p2 = p2->link;	
+	}
+	for (; p1 != NULL; p1 = p1->link) {
+		list3 = insert_last(list3, p1->data);
+	}
+	for (; p2 != NULL; p2 = p2->link) {
+		list3 = insert_last(list3, p2->data);
+	}
+	return list3;
+}
+int main(void) {
+	int i;
+	ListNode *head1=NULL;
+	ListNode *head2=NULL;
+	ListNode *head3=NULL;
+	for (i = 1; i <= 5; i+=2) {
+		head1=insert_last(head1, i);
+	}
+	print_list(head1);
+	for (i = 0; i <=6; i+=2) {
+		head2 = insert_last(head2, i);
+	}
+	print_list(head2);
+
+	head3=alternate(head1, head2, head3);
+	print_list(head3);
+}
