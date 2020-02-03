@@ -1,0 +1,49 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#pragma warning(disable:4996)
+typedef int element;
+typedef struct ListNodeType {
+	element data;
+	struct ListNodeType *link;
+}ListNode;
+ListNode* create() {
+	ListNode *head = (ListNode *)malloc(sizeof(ListNode));
+	head->link = NULL;
+	return head;
+}
+ListNode* insert_last(ListNode *head, element value) {
+	ListNode *new_node = (ListNode *)malloc(sizeof(ListNode));
+	ListNode *p;
+	new_node->data = value;
+	new_node->link = NULL;
+	if (head == NULL) {
+		head = new_node;
+	}
+	else {
+		p = head;
+		while (p->link != NULL) {
+			p = p->link;
+		}
+		p->link = new_node;
+	}
+	return head;
+}
+void print_list(ListNode *head) {
+	ListNode *p = head;
+	for (p = head; p->link != NULL; p = p->link) {
+		printf("%d->", p->data);
+	}
+	printf("%d", p->data);
+}
+int main(void) {
+	int n;
+	int new_value;
+	ListNode *head=NULL;
+	scanf("%d", &n);
+	for (int i = 0; i < n; i++) {
+		scanf("%d", &new_value);
+		head=insert_last(head, new_value);
+	}
+	print_list(head);
+}
