@@ -1,0 +1,133 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#pragma warning(disable:4996)
+typedef struct{
+	int coef;
+	int poly;
+}element;
+typedef struct ListNodeType {
+	element data;
+	struct ListNodeType *link;
+}ListNode;
+ListNode* insert_last(ListNode *head, element value) {
+	ListNode *new_node = (ListNode *)malloc(sizeof(ListNode));
+	ListNode *p;
+	new_node->data = value;
+	new_node->link = NULL;
+	if (head == NULL) {
+		head = new_node;
+	}
+	else {
+		p = head;
+		while (p->link != NULL) {
+			p = p->link;
+		}
+		p->link = new_node;
+	}
+	return head;
+}
+element *create_element(int coef, int poly) {
+	element* new_element = (element*)malloc(sizeof(element));
+	new_element->coef = coef;
+	new_element->poly = poly;
+	return new_element;
+}
+void print_list(ListNode *head) {
+	ListNode *p;
+	for (p = head; p->link != NULL; p = p->link) {
+		printf("%dx^%d +", p->data.coef,p->data.poly);
+	}
+	printf("%dx^%d\n", p->data.coef,p->data.poly);
+}
+
+ListNode* split1(ListNode *c, ListNode *a) {
+	ListNode *p;
+	int i = 0;
+	for (p = c; p != NULL; p = p->link) {
+		if (i % 2 == 0) {
+			a = insert_last(a, p->data);
+		}
+		i++;
+	}
+	return a;
+}
+ListNode * split2(ListNode *c, ListNode *a) {
+	ListNode *p;
+	int i = 0;
+	for (p = c; p != NULL; p = p->link) {
+		if (i % 2 != 0) {
+			a = insert_last(a, p->data);
+		}
+		i++;
+	}
+	return a;
+}
+void split(ListNode *c, ListNode *a, ListNode *b) { 
+	ListNode *p;
+	int i = 0;
+	for (p = c; p != NULL; p = p->link) {
+		if (i % 2 == 0) {
+			a = insert_last(a, p->data);
+		}
+		else {
+			b = insert_last(b, p->data);
+		}
+		i++;
+	}// a와 b가 split함수를 나와서 main함수에서 쓰였을 때는 변화가 적용되지 않지?
+	print_list(a);
+	print_list(b);
+}
+
+ListNode *add_poly(ListNode *head1, ListNode *head2, ListNode *head3) {
+	ListNode *p1;
+	ListNode *p2;
+	int sum=0;
+	p1 = head1;
+	p2 = head2;
+	while (p1&&p2) {
+		if (p1->data.poly > p2->data.poly) {
+			head3 = insert_last(head3, p1->data);
+			p1 = p1->link;
+		}
+		else if (p1->data.poly < p2->data.poly) {
+			head3 = insert_last(head3, p2->data);
+			p2 = p2->link;
+		}
+		else {
+			sum = (p1->data.coef) + (p2->data.coef);
+			head3 = insert_last(head3, *create_element(sum, p1->data.poly));
+			p1 = p1->link;
+			p2 = p2->link;
+		}
+	}
+	for (; p1 != NULL; p1 = p1->link) {
+		head3 = insert_last(head3, p1->data);
+	}
+	for (; p2 != NULL; p2 = p2->link) {
+		head3 = insert_last(head3, p2->data);
+	}
+	return head3;
+}
+int main(void) {
+	int i;
+	ListNode *head1=NULL;
+	ListNode *head2=NULL;
+	ListNode *head3=NULL;
+
+	head1=insert_last(head1,*create_element(3, 6));
+	head1=insert_last(head1, *create_element(7, 3));
+	head1=insert_last(head1, *create_element(-2, 2));
+	head1=insert_last(head1, *create_element(-9, 0));
+	print_list(head1);
+
+	head2=insert_last(head2, *create_element(-2, 6));
+	head2=insert_last(head2, *create_element(-4, 4));
+	head2=insert_last(head2, *create_element(6, 2));
+	head2=insert_last(head2, *create_element(6, 1));
+	head2=insert_last(head2, *create_element(1, 0));
+	print_list(head2);
+
+	head3=add_poly(head1, head2, head3);
+	print_list(head3);
+}
