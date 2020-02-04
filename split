@@ -1,0 +1,82 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#pragma warning(disable:4996)
+typedef int element;
+typedef struct ListNodeType {
+	element data;
+	struct ListNodeType *link;
+}ListNode;
+ListNode* insert_last(ListNode *head, element value) {
+	ListNode *new_node = (ListNode *)malloc(sizeof(ListNode));
+	ListNode *p;
+	new_node->data = value;
+	new_node->link = NULL;
+	if (head == NULL) {
+		head = new_node;
+	}
+	else {
+		p = head;
+		while (p->link != NULL) {
+			p = p->link;
+		}
+		p->link = new_node;
+	}
+	return head;
+}
+void print_list(ListNode *head) {
+	ListNode *p;
+	for (p = head; p->link != NULL; p = p->link) {
+		printf("%d->", p->data);
+	}
+	printf("%d\n", p->data);
+}
+
+ListNode* split1(ListNode *c, ListNode *a) {
+	ListNode *p;
+	int i = 0;
+	for (p = c; p != NULL; p = p->link) {
+		if (i % 2 == 0) {
+			a = insert_last(a, p->data);
+		}
+		i++;
+	}
+	return a;
+}
+ListNode * split2(ListNode *c, ListNode *a) {
+	ListNode *p;
+	int i = 0;
+	for (p = c; p != NULL; p = p->link) {
+		if (i % 2 != 0) {
+			a = insert_last(a, p->data);
+		}
+		i++;
+	}
+	return a;
+}
+void split(ListNode *c, ListNode *a, ListNode *b) { 
+	ListNode *p;
+	int i = 0;
+	for (p = c; p != NULL; p = p->link) {
+		if (i % 2 == 0) {
+			a = insert_last(a, p->data);
+		}
+		else {
+			b = insert_last(b, p->data);
+		}
+		i++;
+	}
+	print_list(a);
+	print_list(b);
+}
+int main(void) {
+	int i;
+	ListNode *head1=NULL;
+	ListNode *head2=NULL;
+	ListNode *head3=NULL;
+	
+	for (i = 0; i <10; i++) {
+		head1 = insert_last(head1, i);
+	}
+	split(head1, head2, head3);
+}
