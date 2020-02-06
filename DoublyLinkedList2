@@ -1,0 +1,84 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#pragma warning(disable:4996)
+typedef int element;
+typedef struct DoublyListNodeType {
+	element data;
+	struct DoublyListNodeType *llink;
+	struct DoublyListNodeType *rlink;
+
+}DoublyListNode;
+typedef struct DoublyListType {
+	int currentElementCount;
+	DoublyListNode *headerNode;
+}DoublyList;
+DoublyList* createDoubllyList() {
+	DoublyList *dlist = NULL;
+	dlist = (DoublyList *)malloc(sizeof(DoublyList));
+	memset(dlist, 0, sizeof(DoublyList));
+	dlist->headerNode->llink = (dlist->headerNode);
+	dlist->headerNode->rlink = (dlist->headerNode);
+	return dlist;
+}
+void addDElement(DoublyList *list, int position, DoublyListNode element) {
+	DoublyListNode *pre_node = NULL;
+	DoublyListNode *new_node = NULL;
+	new_node = (DoublyList *)malloc(sizeof(DoublyList));
+	*new_node = element;
+	new_node->llink = NULL;
+	new_node->rlink = NULL;
+	pre_node = (list->headerNode);
+	for (int i = 0; i < position; i++) {//헤더 노드부터 시작 1+(position-1)=position
+		pre_node = pre_node->rlink;
+	}
+	new_node->llink = pre_node;
+	new_node->rlink = pre_node->rlink;
+	pre_node->rlink = new_node;
+	new_node->rlink->llink = new_node;
+	list->currentElementCount++;
+}
+void removeDElement(DoublyList *list, int position) {
+	DoublyListNode *pre_node = NULL;
+	DoublyListNode *del_node = NULL;
+	DoublyListNode *temp_node = NULL;
+	pre_node = list->headerNode;
+	for (int i = 0; i < position; i++) {
+		pre_node = pre_node->rlink;
+	}
+	del_node = pre_node->rlink;
+	pre_node->rlink = del_node->rlink;
+	del_node->rlink->llink = pre_node;
+	free(del_node);
+	list->currentElementCount--;
+
+}
+DoublyListNode *getElement(DoublyList *list, int position) {
+	DoublyListNode *p = NULL;
+	p = list->headerNode->rlink;//시작이 0번째 노드
+	for (int i = 0; i < position; i++) {
+		p = p->rlink;
+	}
+	return p;
+}
+void displayDoublyList(DoublyList *list) {
+	int i;
+
+	for (i = 0; i < list->currentElementCount; i++) {
+		printf("<-|%d|->", getElement(list, i)->data);
+	}
+}
+void clearDoublyList(DoublyList *list) {
+	while (list->currentElementCount > 0) {
+		removeDElement(list, 0);
+	}
+}
+void deleteDoublyList(DoublyList* list) {
+	if (list != NULL) {
+		clearDoublyList(list);
+		free(list);
+	}
+}
+int getDoublyListLength(DoublyList *list) {
+	return list->currentElementCount;
+}
