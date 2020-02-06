@@ -1,0 +1,113 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#pragma warning(disable:4996)
+typedef int element;
+typedef struct CircularListNodeType {
+	element data;
+	struct CircularListNode *link;
+}CircularListNode;
+typedef struct CircularListType {
+	int currentElementCount;
+	CircularListNode *head;//맨 앞의 노드 즉 0번째 노드
+}CircularList;
+void addCElement(CircularList *list, int position, CircularListNode value) {
+	CircularListNode *new_node = NULL;
+	CircularListNode *last_node = NULL;
+	CircularListNode *pre_node = NULL;
+	int i;
+	new_node = (CircularListNode *)malloc(sizeof(CircularListNode));
+	*new_node = value;
+	new_node->link = NULL;
+	if (position == 0) {
+		if (list->currentElementCount == 0) {
+			list->head = new_node;
+			new_node->link = new_node;
+		}
+		else {
+			last_node = list->head;
+			while (last_node->link != list->head) {
+				last_node = last_node->link;
+			}
+			list->head = new_node;
+			new_node->link = last_node->link;
+			last_node->link = new_node;
+		}
+	}
+	else {
+		pre_node = list->head;
+		for (i = 0; i < position - 1; i++) {
+			pre_node = pre_node->link;
+		}
+		new_node->link = pre_node->link;
+		pre_node->link = new_node;
+	}
+	list->currentElementCount++;
+
+}
+void removeCElement(CircularList *list, int position) {
+	CircularListNode *pre_node = NULL;
+	CircularListNode *del_node = NULL;
+	CircularListNode *last_node = NULL;
+	if (position == 0) {
+		del_node = list->head;
+		if (list->currentElementCount == 1) {
+			free(del_node);
+			list->head = NULL;
+		}
+		else {
+			last_node = list->head;
+			while (last_node->link != list->head) {
+				last_node = last_node->link;
+			}
+			last_node->link = del_node->link;
+			list->head = del_node->link;
+			free(del_node);
+		}
+	}
+	else {
+		pre_node = list->head;
+		for (int i = 0; i < position - 1; i++) {
+			pre_node = pre_node->link;
+		}
+		del_node = pre_node->link;
+		pre_node->link = del_node->link;
+		free(del_node);
+	}
+	list->currentElementCount--;
+}
+CircularListNode* getCElement(CircularList *list, int position) {
+	CircularListNode *node = NULL;
+	node = list->head;
+	for (int i = 0; i < position; i++) {
+		node = node->link;
+	}
+	return node;
+}
+CircularList* createCircularList() {
+	CircularList *new_list = NULL;
+	new_list = (CircularList *)malloc(sizeof(CircularList));
+	memset(new_list, 0, sizeof(CircularList));
+	return new_list;
+}
+int getCircularListLength(CircularList *list) {
+	return (list->currentElementCount);
+}
+void display(CircularList *list) {
+	CircularListNode *node = list->head;
+	for (int i = 0; i < list->currentElementCount; i++) {
+		node=node->link;
+		printf("%d->", node->data);
+	}
+}
+void clearCircularList(CircularList *list) {
+	while (list->currentElementCount > 0) {
+		removeCElement(list, 0);
+	}
+}
+void deleteCircularList(CircularList *list) {
+	if (list != NULL) {
+		clearCircularList(list);
+		free(list);
+	}
+}
