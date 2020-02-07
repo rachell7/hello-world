@@ -1,0 +1,22 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#pragma warning(disable:4996)
+typedef int element;
+typedef struct ListNode {
+	element data;
+	struct ListNode *llink;
+	struct ListNode *rlink;
+}DListNode;
+void reverse(DListNode* list) {
+	DListNode *p;
+	for (p = list; p != list; p = p->llink) {
+		printf("%d", p->data);
+	}
+}
+DListNode *search(DListNode *list, element data) {
+	for (DListNode *p = list; p != list; p = p->rlink) {
+		if (p->data == data)
+			return p;
+	}
+}
