@@ -1,0 +1,56 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#pragma warning(disable:4996)
+typedef int element;
+typedef struct ListNode{
+	element data;
+	struct ListNode *link;
+}ListNode;
+typedef struct LinkedList {
+	int currentElementCount;
+	ListNode *headerNode;
+}LinkedList;
+void iterateLinkedList(LinkedList *list) {
+	ListNode *p = NULL;
+	int count = 0;
+	if (p != NULL) {
+		p = list->headerNode->link;
+		while (p != NULL) {
+			printf("%d->", p->data);
+			count++;
+			p = p->link;
+		}
+	}
+	printf("%d", count);
+}
+void concatLinkedList(LinkedList *a, LinkedList *b) {
+	ListNode *pa = NULL;
+	ListNode *pb = NULL;
+	if (pa != NULL && pb != NULL) {
+		pa = a->headerNode->link;
+		while (pa->link != NULL) {
+			pa = pa->link;
+		}
+		pa->link = b->headerNode->link;//헤더노드는 dummy node 라는 거
+		a->currentElementCount += b->currentElementCount;
+		b->headerNode->link = NULL;
+		b->currentElementCount = 0;
+	}
+}
+void reverseLinkedList(LinkedList *list) {
+	ListNode *p = NULL;
+	ListNode *pre = NULL;
+	ListNode *current = NULL;
+
+	if (list != NULL) {
+		p = list->headerNode->link;
+		while (p != NULL) {
+			pre = current;
+			current = p;
+			p = p->link;
+			current->link = pre;
+		}
+		list->headerNode->link = current;
+	}
+}
