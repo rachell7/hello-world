@@ -1,0 +1,43 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#pragma warning(disable:4996)
+typedef int element;
+typedef struct ListNode {
+	element data;
+	struct ListNode *link;
+}ListNode;
+ListNode *create_first(ListNode *list, element data) {
+	ListNode *new_node = NULL;
+	new_node = (ListNode *)malloc(sizeof(ListNode));
+	new_node->data = data;
+	if (list == NULL) {
+		list = new_node;
+		new_node->link = list;
+	}
+	else {
+		ListNode *last_node = list;
+		do {
+			last_node = last_node->link;
+		} while (last_node->link != list);
+		new_node->link = list;
+		last_node->link = new_node;
+		list = new_node;
+	}
+	return list;
+}
+ListNode *search(ListNode *L, element data) {
+	ListNode *p = L;
+	for (p = L; p->link != L; p = p->link) {
+		if (p->data == data)
+			return p;
+	}
+}
+ListNode *get_size(ListNode *L) {
+	ListNode *p = NULL;
+	int count = 0;
+	for (p = L; p->link != L; p = p->link) {
+		count++;
+	}
+	return count;
+}
