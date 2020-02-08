@@ -1,0 +1,45 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#pragma warning(disable:4996)
+typedef int element;
+typedef struct ArrayStackNodeType {
+	element data;
+}ArrayStackNode;
+typedef struct ArrayStackType {
+	int maxElementCount;
+	int currentElementCount;
+	ArrayStackNode *head;
+}ArrayStack;
+int is_full(ArrayStack *stack) {
+	return stack->maxElementCount - 1 == stack->currentElementCount;
+}
+int is_empty(ArrayStack *stack) {
+	return stack->currentElementCount == -1;
+}
+ArrayStack* createArrayStack(int size) {
+	ArrayStack *new_stack = NULL;
+	new_stack = (ArrayStack*)malloc(sizeof(ArrayStack));
+	//memset(new_stack,0,sizeof(ArrayStack))
+	new_stack->maxElementCount = size;
+	new_stack->currentElementCount = -1;
+	//memset(new_stack->head,0,sizeof(element)*size)
+	new_stack->head = (ArrayStackNode *)malloc(sizeof(element)*size);
+	return new_stack;
+}
+void push(ArrayStack *stack, ArrayStackNode element) {
+	if (!is_full(stack)) {
+		stack->head[stack->currentElementCount++] = element;
+	}
+}
+ArrayStackNode *pop(ArrayStack *stack) {
+	if (!is_empty(stack)) {
+		return &(stack->head[stack->currentElementCount--]);
+	}
+}
+void deleteArrayStack(ArrayStack *stack) {
+	if (stack->head != NULL) {
+		free(stack->head);
+	}
+	free(stack);
+}
