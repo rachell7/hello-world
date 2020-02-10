@@ -1,0 +1,99 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#pragma warning(disable:4996)
+#define MAX_SIZE 1000000
+typedef char element;
+typedef struct StackNode {
+	element *data;
+	int top;
+}Stack;
+Stack* create(int size) {
+	Stack *s = NULL;
+	s = (Stack*)malloc(sizeof(Stack));
+	s->top = -1;
+	s->data = (element *)malloc(sizeof(element)*size);
+	return s;
+}
+
+int is_empty(Stack *s) {
+	return (s->top == -1);
+}
+void push(Stack *s, element value) {
+	s->data[++(s->top)] = value;
+}
+element peek(Stack *s) {
+	if (is_empty(s)) {
+		return s->top;
+	}
+	else {
+		return s->data[s->top];
+	}
+}
+element pop(Stack *s) {
+	if (is_empty(s)) {
+		return s->top;
+	}
+	else {
+		return s->data[(s->top)--];
+	}
+}
+int size(Stack *s) {
+	return (s->top + 1);
+}
+element top(Stack *s) {
+	if (is_empty(s)) {
+		return s->top;
+	}
+	else {
+		return s->data[s->top];
+	}
+}
+//후위 표기 수식 계산 함수
+int eval(char exp[]) {//문자열로 변환하기
+	Stack *s = NULL;
+	int i;
+	int value;//문자를 숫자로
+	int num1, num2;
+	s = create(MAX_SIZE);
+	for (i = 0; i < strlen(exp); i++) {
+		if (exp[i] != '+'&&exp[i] != '-'&&exp[i] != '/'&&exp[i] != '*') {
+			value = exp[i] - '0';
+			push(s, value);
+		}
+		else {
+			num2 = pop(s);
+			num1 = pop(2);
+			switch (exp[i]) {
+			case'+':
+				push(s, num1 + num2);
+				break;
+			case'-':
+				push(s, num1 - num2);
+				break;
+			case'*':
+				push(s, num1*num2);
+				break;
+			case'/':
+				push(s, num1/num2);
+				break;
+			}
+		}
+	}
+	return pop(s);
+}
+
+
+int main(void) {
+	int n;
+	int i;
+	int *a = NULL;
+	scanf("%d", &n);
+	a = (int *)malloc(sizeof(int)*n);
+	for (i = 0; i < n; i++) {
+		scanf("%d", &a[i]);
+	}
+	array_stack(a, n);
+}
+
+
