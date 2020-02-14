@@ -1,0 +1,51 @@
+#include <stdio.h>
+#include <stdlib.h>
+#pragma warning(disable:4996)
+typedef char element;
+typedef struct ArrayQueueNodeType {
+	element data;
+}ArrayQueueNode;
+typedef struct ArrayQueueType {
+	int maxElementCount;
+	int currentElementCount;//없을 경우 front 와 rear 사이 하나의 자리는 꼭 포함되어있어야함 (공백 상태와 포화 상태 구분을 위해) 
+	int front; 
+	int rear;
+	ArrayQueueNode *pElement;
+}ArrayQueue;
+ArrayQueue *createArrayQueue(int maxElementCount) {
+	ArrayQueue *new_array=NULL;
+	new_array = (ArrayQueue *)malloc(sizeof(ArrayQueue));
+	memset(new_array, 0, sizeof(ArrayQueue));
+	new_array->front = -1;
+	new_array->rear = -1;//front와 rear의 초기값을 0으로 설정하고 삭제/삽입 시 먼저 증가하고 삭제/삽입하면 됨
+	new_array->currentElementCount = 0;
+	new_array->maxElementCount = maxElementCount;
+	new_array->pElement = (ArrayQueueNode *)malloc(sizeof(ArrayQueueNode)*maxElementCount);
+	memset(new_array->pElement, 0, sizeof(ArrayQueueNode)*maxElementCount);
+	return new_array;
+}
+void enqueueAQ(ArrayQueue *q, ArrayQueueNode value) {
+	q->rear = (q->rear + 1) % (q->maxElementCount);//최대 수용 개수로 나눈 나머지
+	q->pElement[q->rear] = value;
+	q->currentElementCount++;
+}
+ArrayQueueNode *dequeueAQ(ArrayQueue *q) {
+	q->front = (q->front + 1) % (q->maxElementCount);
+	q->currentElementCount--;
+	return &(q->pElement[q->front]);
+}
+ArrayQueueNode *peek(ArrayQueue *q) {
+	return &(q->pElement[q->front+1]);
+}
+int is_full(ArrayQueue* q) {
+	if (q->currentElementCount == q->maxElementCount)//포화일 경우 front와 rear사이 공백 하나 존재; (q->rear+1)%q->maxElementCount==(q->front)
+		return 1;
+	else
+		return 0;
+}
+int is_empty(ArrayQueue *q) {
+	if (q->currentElementCount == 0)//공백일 경우 q->front==q->rear
+		return 1;
+	else
+		return 0;
+}
