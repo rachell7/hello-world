@@ -1,0 +1,49 @@
+#include <stdio.h>
+#include <stdlib.h>
+#pragma warning(disable:4996)
+typedef char element;
+typedef struct ArrayQueueNodeType {
+	element data;
+}ArrayQueueNode;
+typedef struct ArrayQueueType {
+	int maxElementCount;
+	int currentElementCount;
+	int front; 
+	int rear;
+	ArrayQueueNode *pElement;
+}ArrayQueue;
+ArrayQueue *createArrayQueue(int maxElementCount) {
+	ArrayQueue *new_array=NULL;
+	new_array = (ArrayQueue *)malloc(sizeof(ArrayQueue));
+	memset(new_array, 0, sizeof(ArrayQueue));
+	new_array->front = -1;
+	new_array->rear = -1;
+	new_array->currentElementCount = 0;
+	new_array->maxElementCount = maxElementCount;
+	new_array->pElement = (ArrayQueueNode *)malloc(sizeof(ArrayQueueNode)*maxElementCount);
+	memset(new_array->pElement, 0, sizeof(ArrayQueueNode)*maxElementCount);
+	return new_array;
+}
+void enqueueAQ(ArrayQueue *q, ArrayQueueNode value) {
+	q->pElement[++q->rear] = value;
+	q->currentElementCount++;
+}
+ArrayQueueNode *dequeueAQ(ArrayQueue *q) {
+	q->currentElementCount--;
+	return &(q->pElement[++q->front]);
+}
+ArrayQueueNode *peek(ArrayQueue *q) {
+	return &(q->pElement[q->front+1]);
+}
+int is_full(ArrayQueue* q) {
+	if (q->currentElementCount == q->maxElementCount || q->rear == q->maxElementCount - 1)
+		return 1;
+	else
+		return 0;
+}
+int is_empty(ArrayQueue *q) {
+	if (q->currentElementCount == 0)//q->front==q->rear
+		return 1;
+	else
+		return 0;
+}
