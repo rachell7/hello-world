@@ -1,0 +1,90 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#pragma warning(disable:4996)
+typedef char element;
+typedef struct DequeNodeType {
+	element data;
+	struct DequeNodeType *llink;
+	struct DequeNodeType *rlink;
+
+}DequeNode;
+typedef struct LinkedQueueType {
+	int currentElementCount;
+	DequeNode *front, *rear;
+}LinkedDeque;
+LinkedDeque * create() {
+	LinkedDeque *new_link = NULL;
+	new_link = (LinkedDeque *)malloc(sizeof(LinkedDeque));
+	memset(new_link, 0, sizeof(LinkedDeque));
+	return new_link;
+}
+void insertFront(LinkedDeque *q,element data) {
+	DequeNode *new_node = NULL;
+	new_node->data = data;
+	new_node->llink = NULL;
+	new_node->rlink = NULL;
+	if (is_empty(q)) {
+		q->front = new_node;
+		q->rear = new_node;
+	}
+	else {
+		q->front->llink = new_node;
+		new_node->rlink = q->front;
+		q->front = new_node;
+	}
+	q->currentElementCount++;
+}
+void insertRear(LinkedDeque *q, element data) {
+	DequeNode *new_node = NULL;
+	new_node->data = data;
+	new_node->llink = NULL;
+	new_node->rlink = NULL;
+	if (is_empty(q)) {
+		q->front = new_node;
+		q->rear = new_node;
+	}
+	else {
+		q->rear->rlink = new_node;
+		new_node->llink = q->rear;
+		q->rear = new_node;
+	}
+	q->currentElementCount++;
+}
+DequeNode* deleteFront(LinkedDeque *q) {
+	DequeNode *temp;
+	temp = q->front;
+	q->front = q->front->rlink;
+	temp->rlink = NULL;
+
+	q->currentElementCount--;
+	if (q->front==NULL) {
+		q->rear = NULL;
+	}
+	else {
+		q->front->llink = NULL;
+	}
+	return temp;
+}
+
+DequeNode *peekFront(LinkedDeque *q) {
+	return q->front;
+}
+
+DequeNode *deleteRear(LinkedDeque *q) {
+	DequeNode *temp;
+	temp = q->rear;
+	q->rear = q->rear->llink;
+	temp->llink = NULL;
+
+	q->currentElementCount--;
+	if (is_empty(q)) {
+		q->front = NULL;
+	}
+	else {
+		q->rear->rlink = NULL;
+	}
+}
+DequeNode *peekRear(LinkedDeque *q) {
+	return q->rear;
+}
