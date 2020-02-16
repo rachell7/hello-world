@@ -1,0 +1,47 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#pragma warning(disable:4996)
+typedef char element;
+typedef struct QueueNodeType {
+	element data;
+	struct QueueNodeType *link;
+}QueueNode;
+typedef struct LinkedQueueType {
+	int currentElementCount;
+	QueueNode *front, *rear;
+}LinkedQueue;
+LinkedQueue * create() {
+	LinkedQueue *new_link=NULL;
+	new_link = (LinkedQueue *)malloc(sizeof(LinkedQueue));
+	memset(new_link, 0, sizeof(LinkedQueue));
+	return new_link;
+}
+int is_empty(LinkedQueue *q) {
+	return q->front==NULL;
+}
+void enqueue(LinkedQueue *q, element data) {
+	QueueNode *new_node = NULL;
+	new_node = (QueueNode *)malloc(sizeof(QueueNode));
+	new_node->data = data;
+	new_node->link = NULL;
+	if (is_empty(q)) {
+		q->front = new_node;
+		q->rear = new_node;
+	}
+	else {
+		q->rear->link = new_node;
+		q->rear = new_node;
+	}
+}
+element dequeue(LinkedQueue *q) {
+	element data;
+	QueueNode *temp = q->front;
+	data = q->front->data;
+	q->front = q->front->link;
+	if (q->front == NULL) {//노드가 하나있는 연결된 큐에서의 삭제 연산
+		q->rear = NULL;
+	}
+	free(temp);
+	return data;
+}
