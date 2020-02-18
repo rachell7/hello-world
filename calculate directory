@@ -1,0 +1,16 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <memory.h>
+#pragma warning(disable:4996)
+typedef struct TreeNode {
+	int data;
+	struct TreeNode *left, *right;
+}TreeNode;
+int cal_dir_size(TreeNode *root) {
+	int left_size, right_size;
+	if (root == NULL)
+		return 0;
+	left_size = cal_dir_size(root->left);
+	right_size = cal_dir_size(root->right);
+	return (root->data + left_size + right_size);
+}
